@@ -1,0 +1,56 @@
+<div class="app-body-container">
+  <!-- [ngStyle]="{
+  'background-image': backgroundImages[currentImageIndex], 'background-size': 'cover' }" -->
+
+
+  <div class="container">
+    <app-header></app-header>
+  </div>
+
+  <div *ngIf="isLoading; else content">
+    <app-loader></app-loader>
+  </div>
+
+  <ng-template #content>
+    <section>
+      <div class="section-container">
+        <div class="dialogbox">
+          <h2>Add Task</h2>
+          <form [formGroup]="taskForm" (ngSubmit)="submitTask()">
+            <mat-form-field class="example-full-width">
+              <mat-label>Add a task</mat-label>
+              <input matInput placeholder="Enter your task" formControlName="task">
+            </mat-form-field><br>
+            <button mat-raised-button color="primary" type="submit">Add Task</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="tasklist-container">
+        <div class="tasklist">
+          <table mat-table [dataSource]="this.taskDataSource.data" class="mat-elevation-z8">
+            <ng-container matColumnDef="task">
+              <th mat-header-cell *matHeaderCellDef> List of task </th>
+              <td mat-cell *matCellDef="let task; let i = index"> <!--give index for operation on that table row-->
+                <!-- <mat-icon>check_circle_outline</mat-icon> --> <br>
+                <button (click)="removetodo(i)"><mat-icon color="warn">check_circle_outline</mat-icon></button>&nbsp;
+                <button *ngIf="!editMode || (editMode && editedRowIndex !== i)" (click)="editTask(i)"><mat-icon
+                    color="primary">edit</mat-icon></button>
+                <button *ngIf="editMode && editedRowIndex === i" (click)="saveTask()"><mat-icon>save</mat-icon></button>
+
+                <div class="date" style="float: right;">{{date|date}}</div>
+                <div class="space" style="margin:0px;"></div>
+                <br>{{ task }}
+                <div class="space" style="margin:20px;"></div>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef=" ['task']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['task'];"></tr>
+          </table>
+
+        </div>
+      </div>
+    </section>
+
+  </ng-template>
+</div>
